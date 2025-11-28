@@ -1,32 +1,18 @@
 // middleware.ts
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/checkout(.*)",
-  "/api/save-order(.*)",
-  "/success(.*)",
-  "/cancel(.*)",
-  "/api/webhooks(.*)",
-]);
-
-export default clerkMiddleware(async (auth, req) => {
-  // Await auth to get the typed object
-  const { userId } = await auth();
-  
-  if (!userId && !isPublicRoute(req)) {
-    // Redirect to sign-in if not authenticated and route is protected
-    const signInUrl = new URL('/sign-in', req.url);
-    signInUrl.searchParams.set('redirect_url', req.url);
-    return Response.redirect(signInUrl);
-  }
-});
+export default clerkMiddleware();
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    /*
+     * Match all request paths except:
+     * - Next.js internals (_next)
+     * - Static files (images, fonts, etc.)
+     * - favicon.ico
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
+    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 };
