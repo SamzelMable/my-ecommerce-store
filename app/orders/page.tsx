@@ -1,4 +1,3 @@
-// app/orders/page.tsx
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -7,13 +6,9 @@ export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/sign-in");
-  }
+  if (!user) redirect("/sign-in");
 
   const { data: orders } = await supabase
     .from("orders")
@@ -29,8 +24,8 @@ export default async function OrdersPage() {
       </div>
 
       {!orders || orders.length === 0 ? (
-        <p className="text-center text-xl text-muted-foreground py-20">
-          No orders yet. Go buy something!
+        <p className="text-center py-20 text-xl text-muted-foreground">
+          No orders yet. Make a purchase to see it here!
         </p>
       ) : (
         <div className="space-y-6">
@@ -38,9 +33,7 @@ export default async function OrdersPage() {
             <div key={order.id} className="rounded-lg border bg-card p-6">
               <div className="mb-4 flex justify-between">
                 <div>
-                  <p className="font-semibold">
-                    Order #{order.id.slice(0, 8)}
-                  </p>
+                  <p className="font-semibold">Order #{order.id.slice(0,8)}</p>
                   <p className="text-sm text-muted-foreground">
                     {new Date(order.created_at).toLocaleString()}
                   </p>
@@ -49,21 +42,18 @@ export default async function OrdersPage() {
                   ${(order.total_cents / 100).toFixed(2)}
                 </p>
               </div>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {order.items.map((item: any, i: number) => (
                   <div key={i} className="text-center">
                     {item.image_url ? (
-                      <img
-                        src={item.image_url}
-                        alt={item.name}
-                        className="h-32 w-full rounded object-cover"
-                      />
+                      <img src={item.image_url} alt={item.name} className="h-32 w-full object-cover rounded" />
                     ) : (
-                      <div className="bg-muted flex h-32 items-center justify-center rounded">
-                        <span className="text-3xl">{item.name[0]}</span>
+                      <div className="bg-muted h-32 rounded flex items-center justify-center text-3xl">
+                        {item.name[0]}
                       </div>
                     )}
-                    <p className="mt-2 text-sm">{item.name}</p>
+                    <p className="mt-2 text-sm font-medium">{item.name}</p>
+                    <p className="text-xs text-muted-foreground">×{item.quantity}</p>
                   </div>
                 ))}
               </div>
