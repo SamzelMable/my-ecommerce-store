@@ -1,18 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  
-  output: "standalone",
-
+  experimental: {
+    serverComponentsExternalPackages: ['@supabase/ssr'],
+  },
+  // Force dynamic route detection
+  output: 'standalone',  // Ensures all routes are scanned
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',  // For your product images
       },
     ],
   },
-
-  serverExternalPackages: ["@supabase/ssr"],
 };
 
 module.exports = nextConfig;
