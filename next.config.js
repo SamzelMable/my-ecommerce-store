@@ -1,22 +1,19 @@
-// next.config.js   (must be .js, not .ts or .mjs)
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // THIS LINE IS THE MAGIC — forces Vercel to see /orders and every other page
-  output: "standalone",
-
-  // Allow your Unsplash product images
+  experimental: {
+    serverComponentsExternalPackages: ['@supabase/ssr'],
+  },
+  // Force dynamic route detection
+  output: 'standalone',  // Ensures all routes are scanned
+  trailingSlash: false,
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.unsplash.com",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',  // For your product images
       },
     ],
   },
-
-  // Correct syntax for Next.js 16+ (this replaces the old experimental key)
-  serverExternalPackages: ["@supabase/ssr"],
 };
 
 module.exports = nextConfig;
