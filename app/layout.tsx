@@ -31,6 +31,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+console.log('ROUTES LOADED:', ['/', '/orders', '/success']);  // DEBUG: force route detection
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
