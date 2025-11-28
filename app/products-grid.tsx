@@ -1,6 +1,6 @@
 import AddToCartButton from '@/components/add-to-cart-button';
 
-// FORCE REDEPLOY – real product images added 2025
+// FORCE NEW DEPLOYMENT – order history route fix
 
 type Product = {
   id: string;
